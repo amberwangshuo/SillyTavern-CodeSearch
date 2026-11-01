@@ -10,11 +10,16 @@
     margin: 2px 0 4px;
     font-size: calc(var(--mainFontSize, 15px) * 0.9);
     text-align: left;
+    flex: 0 0 auto;
+}
+
+.stcs-toolbar[hidden] {
+    display: none;
 }
 
 .stcs-search-wrap {
-    flex: 1 1 180px;
-    min-width: 140px;
+    flex: 1 1 160px;
+    min-width: 120px;
     display: flex;
     align-items: center;
     gap: 5px;
@@ -33,6 +38,13 @@
     margin: 0;
     padding: 3px 6px;
     font-size: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.stcs-toolbar .stcs-input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .stcs-count {
@@ -50,7 +62,12 @@
     margin: 0;
     padding: 3px 8px;
     width: auto;
-    min-width: 0;
+    min-width: 28px;
+    min-height: 26px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     line-height: 1.2;
     font-size: inherit;
     white-space: nowrap;
@@ -71,6 +88,34 @@
     height: 1.4em;
     background-color: var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.3));
     margin: 0 2px;
+}
+
+/* 收起状态：浮在编辑器右上角的小图标 */
+.stcs-fab {
+    position: absolute;
+    z-index: 6;
+    width: 22px;
+    height: 22px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 11px;
+    cursor: pointer;
+    opacity: 0.55;
+    color: var(--SmartThemeBodyColor, currentColor);
+    background-color: var(--SmartThemeBlurTintColor, rgba(0, 0, 0, 0.3));
+    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.3));
+    transition: opacity 0.15s;
+}
+
+.stcs-fab:hover {
+    opacity: 1;
+}
+
+.stcs-fab[hidden] {
+    display: none;
 }
 
 /* 高亮层：盖在 textarea 上，文字透明，只显示匹配的底色 */
@@ -105,19 +150,39 @@
     outline: 1px solid rgba(255, 160, 0, 0.95);
 }
 
-/* 酒馆自带的放大编辑器：textarea 原本占满 100% 高度，加了搜索栏后改成填满剩余空间 */
-.flexFlowColumn > textarea.stcs-host.maximized_textarea {
-    height: auto !important;
-    flex: 1 1 0;
+/* CodeMirror 里的匹配：CSS Custom Highlight API */
+::highlight(stcs-match) {
+    background-color: rgba(255, 213, 0, 0.35);
+}
+
+::highlight(stcs-current) {
+    background-color: rgba(255, 128, 0, 0.6);
+}
+
+/* 原本撑满父容器的编辑器（放大编辑器）：改成父容器纵向 flex，编辑器填满搜索栏之外的空间 */
+.stcs-col {
+    display: flex !important;
+    flex-direction: column !important;
     min-height: 0;
+}
+
+.stcs-col > .stcs-host.stcs-fill {
+    flex: 1 1 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
 }
 
 /* 设置面板 */
 .stcs-settings .stcs-option {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 6px;
     margin: 4px 0;
+}
+
+.stcs-settings .stcs-option input {
+    margin-top: 0.2em;
+    flex: 0 0 auto;
 }
 
 .stcs-settings small {
