@@ -2,10 +2,12 @@
 // 给酒馆里的代码编辑器和长文本框加一条搜索栏：搜索并高亮（中文、代码都行）、上一个/下一个、
 // 光标定位、区分大小写、正则，另外有一键回顶、一键到底。
 // 原生 textarea 和柏宝箱换上的 CodeMirror 编辑器都支持。
+// 另外带一个「聊天速查」面板（peek.js）：不切换聊天，翻看、搜索同一角色其他聊天里的文字。
 
 import { saveSettingsDebounced } from '../../../../script.js';
 import { extension_settings } from '../../../extensions.js';
 import { attach, detachAll, installWatcher, installHotkeys, getCodeMirrorView } from './core.js';
+import { initChatPeek } from './peek.js';
 
 const MODULE_NAME = 'codeSearch';
 
@@ -238,4 +240,11 @@ jQuery(() => {
         attach: (el, options = {}) => attach(el, { ...getAttachOptions(), force: true, ...options }),
         rescan: watcher.rescan,
     };
+
+    // 聊天速查：不切换聊天，翻看、搜索同一角色的其他聊天（peek.js，和上面的搜索栏互不依赖）
+    try {
+        initChatPeek();
+    } catch (error) {
+        console.error('[Chat Peek] init failed', error);
+    }
 });
